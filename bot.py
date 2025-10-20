@@ -23,7 +23,7 @@ async def on_ready():
     app_commands.Choice(name='Dual Hook Method', value='dual')
 ])
 async def tutorials(interaction: discord.Interaction, option: str):
-    embed = discord.Embed(title='<:emoji_id:1429128618801365113> Tutorials', color=0x00ff00)
+    embed = discord.Embed(title=' Tutorials <:verified:1429128618801365113>', color=0x00ff00)
     if option == 'private':
         pages = [
             discord.Embed(title='<:Verified:1429128618801365113> Private Server Tutorial (1/3)', description='**Text-based guide:**', color=0x00ff00),
