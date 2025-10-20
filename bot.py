@@ -3,11 +3,25 @@ from discord.ext import commands
 from discord import app_commands
 import os
 import datetime
+from flask import Flask
+import threading
+import asyncio
 
 intents = discord.Intents.default()
 intents.members = True
 intents.message_content = False
 bot = commands.Bot(command_prefix='!', intents=intents)
+
+# Flask app for Render Web Service
+app = Flask(__name__)
+
+@app.route('/')
+def health_check():
+    return 'Bot is running!'
+
+def run_flask():
+    port = int(os.getenv('PORT', 8000))
+    app.run(host='0.0.0.0', port=port)
 
 @bot.event
 async def on_ready():
@@ -123,5 +137,9 @@ async def mute(interaction: discord.Interaction, user: discord.Member, duration_
     except Exception:
         await interaction.response.send_message('Failed to mute user.', ephemeral=True)
 
+async def main():
+    threading.Thread(target=run_flask, daemon=True).start()
+    await bot.start(os.getenv('DISCORD_TOKEN'))
+
 if __name__ == '__main__':
-    bot.run(os.getenv('DISCORD_TOKEN'))
+    asyncio.run(main())
