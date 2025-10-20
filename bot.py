@@ -90,7 +90,7 @@ async def tutorials(interaction: discord.Interaction, option: str):
             'inline': False
         }, {
             'name': 'Step 3: Advertise or whatever ts is',
-            'value': 'Once you're done with your entire server and done with it, try to associate with as many beam servers as you can, invite your friends, and even secretly steal members from different beam servers. FOR GOOD AND QUICK ADVERTISING YOU CAN MAKE A YOUTUBE VIDEO!',
+            'value': 'Once you are done with your entire server and done with it, try to associate with as many beam servers as you can, invite your friends, and even secretly steal members from different beam servers. FOR GOOD AND QUICK ADVERTISING YOU CAN MAKE A YOUTUBE VIDEO!',
             'inline': False
         }, {
             'name': 'Server Template',
