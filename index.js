@@ -283,7 +283,7 @@ client.on('interactionCreate', async interaction => {
                 .setDescription(`Bot has been running for ${days}d ${hours}h ${minutes}m ${seconds}s`)
                 .setColor(0x00ff00)
                 .setFooter({ text: 'HAPPY BEAMING! 🥳' });
-            await interaction.reply({ embeds: [embed], ephemeral: true });
+            await interaction.reply({ embeds: [embed], ephemeral: false });
         } else if (commandName === 'warn') {
             if (!interaction.member.roles.cache.some(role => role.name === 'Moderator') && !interaction.member.permissions.has('Administrator') && !interaction.member.permissions.has('ModerateMembers')) {
                 return interaction.reply({ content: 'You need Moderator or Admin permissions!', ephemeral: true });
