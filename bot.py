@@ -28,7 +28,7 @@ async def tutorials(interaction: discord.Interaction, option: str):
         pages = [
             discord.Embed(title='<:Verified:1429128618801365113> Private Server Tutorial (1/3)', description='**Text-based guide:**', color=0x00ff00),
             discord.Embed(title='<:Verified:1429128618801365113> Private Server Tutorial (2/3)', description='**Continued:**', color=0x00ff00),
-            discord.Embed(title='<:Verified:1429128618801365113> Private Server Tutorial (3/3)', description='**Final Steps:**', color=0x00ff00, footer={'text': 'HAPPY BEAMING! <:happy:1429116539680067646>'})
+            discord.Embed(title='<:Verified:1429128618801365113> Private Server Tutorial (3/3)', description='**Final Steps:**', color=0x00ff00, footer={'text': 'HAPPY BEAMING! <:gold:1429116539680067646>'})
         ]
         
         pages[0].add_fields({
@@ -104,7 +104,7 @@ async def tutorials(interaction: discord.Interaction, option: str):
 async def method(interaction: discord.Interaction):
     embed = discord.Embed(title='<:emoji_id:1429128618801365113> Main Method', description='[Read the full guide here](https://ptb.discord.com/channels/1406868498772398091/1428791488866947132)\n\nNGA DONT BE LAZY ASF AND START READING', color=0x00ff00)
     embed.add_field(name='Extra Tools', value='[Test Hyperlink](https://omegabeam-hyperlink.netlify.app/)\n[Main Website](https://shorturl.at/jiifG)', inline=False)
-    embed.set_footer(text='HAPPY BEAMING! <:happy:1429116539680067646>')
+    embed.set_footer(text='HAPPY BEAMING! <:gold:1429116539680067646>')
     await interaction.response.send_message(embed=embed, ephemeral=False)
 
 @bot.tree.command(name='ban', description='Ban a user ')
