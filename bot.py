@@ -107,7 +107,7 @@ async def method(interaction: discord.Interaction):
     embed.set_footer(text='HAPPY BEAMING! <:happy:1429116539680067646>')
     await interaction.response.send_message(embed=embed, ephemeral=False)
 
-@bot.tree.command(name='ban', description='Ban a user (Moderators only)')
+@bot.tree.command(name='ban', description='Ban a user ')
 @app_commands.describe(user='The user to ban', reason='Reason for ban')
 async def ban(interaction: discord.Interaction, user: discord.Member, reason: str = 'No reason provided'):
     if not any(role.name == 'Moderator' for role in interaction.user.roles):
