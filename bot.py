@@ -102,7 +102,7 @@ async def tutorials(interaction: discord.Interaction, option: str):
 
 @bot.tree.command(name='method', description='Get the main method guide')
 async def method(interaction: discord.Interaction):
-    embed = discord.Embed(title='<:emoji_id:1429128618801365113> Main Method', description='[Read the full guide here](https://ptb.discord.com/channels/1406868498772398091/1428791488866947132)\n\nNGA DONT BE LAZY ASF AND START READING', color=0x00ff00)
+    embed = discord.Embed(title=' Main Method <:emoji_id:1429128618801365113>', description='[Read the full guide here](https://ptb.discord.com/channels/1406868498772398091/1428791488866947132)\n\nNGA DONT BE LAZY ASF AND START READING', color=0x00ff00)
     embed.add_field(name='Extra Tools', value='[Test Hyperlink](https://omegabeam-hyperlink.netlify.app/)\n[Main Website](https://shorturl.at/jiifG)', inline=False)
     embed.set_footer(text='HAPPY BEAMING! <:gold:1429116539680067646>')
     await interaction.response.send_message(embed=embed, ephemeral=False)
