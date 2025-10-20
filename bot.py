@@ -26,9 +26,9 @@ async def tutorials(interaction: discord.Interaction, option: str):
     embed = discord.Embed(title='<:emoji_id:1429128618801365113> Tutorials', color=0x00ff00)
     if option == 'private':
         pages = [
-            discord.Embed(title='<:emoji_id:1429128618801365113> Private Server Tutorial (1/3)', description='**Text-based guide:**', color=0x00ff00),
-            discord.Embed(title='<:emoji_id:1429128618801365113> Private Server Tutorial (2/3)', description='**Continued:**', color=0x00ff00),
-            discord.Embed(title='<:emoji_id:1429128618801365113> Private Server Tutorial (3/3)', description='**Final Steps:**', color=0x00ff00, footer={'text': 'HAPPY BEAMING! <:happy:1429116539680067646>'})
+            discord.Embed(title='<:Verified:1429128618801365113> Private Server Tutorial (1/3)', description='**Text-based guide:**', color=0x00ff00),
+            discord.Embed(title='<:Verified:1429128618801365113> Private Server Tutorial (2/3)', description='**Continued:**', color=0x00ff00),
+            discord.Embed(title='<:Verified:1429128618801365113> Private Server Tutorial (3/3)', description='**Final Steps:**', color=0x00ff00, footer={'text': 'HAPPY BEAMING! <:happy:1429116539680067646>'})
         ]
         
         pages[0].add_fields({
@@ -72,7 +72,7 @@ async def tutorials(interaction: discord.Interaction, option: str):
             'value': 'Type what i show on image and then on [](https://tinyurl.com/)" change it to your link\n\n[Test Hyperlink Tool](https://omegabeam-hyperlink.netlify.app/)\n[Main Website](https://shorturl.at/jiifG)',
             'inline': False
         })
-        pages[2].set_footer(text='Thats it! HAPPY BEAMING! <:happy:1429116539680067646>')
+        pages[2].set_footer(text='Thats it! HAPPY BEAMING! <:gold:1429116539680067646>')
         
         await interaction.response.send_message(embed=pages[0], ephemeral=False)
     elif option == 'yt':
