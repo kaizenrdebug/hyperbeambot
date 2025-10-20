@@ -17,14 +17,14 @@ client.once('ready', async () => {
     const commands = [
         new SlashCommandBuilder()
             .setName('tutorials')
-            .setDescription('Get tutorials for private server setup')
+            .setDescription('get tutorials on how to beam')
             .addStringOption(option =>
                 option.setName('option')
                     .setDescription('Choose a tutorial type')
                     .setRequired(true)
                     .addChoices(
                         { name: 'Private Server Tut', value: 'private' },
-                        { name: 'YouTube Tutorial', value: 'yt' },
+                        { name: 'YouTube Tut', value: 'yt' },
                         { name: 'Dual Hook Method', value: 'dual' }
                     )
             ),
@@ -93,7 +93,7 @@ client.once('ready', async () => {
             ),
         new SlashCommandBuilder()
             .setName('clear')
-            .setDescription('Clear/purge messages in the channel whatever bruh ')
+            .setDescription('Clear/purge messages in the channel  ')
             .addIntegerOption(option =>
                 option.setName('amount')
                     .setDescription('Number of messages to delete (1-100)')
