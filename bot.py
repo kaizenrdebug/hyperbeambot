@@ -111,7 +111,7 @@ async def method(interaction: discord.Interaction):
 @app_commands.describe(user='The user to ban', reason='Reason for ban')
 async def ban(interaction: discord.Interaction, user: discord.Member, reason: str = 'No reason provided'):
     if not any(role.name == 'Moderator' for role in interaction.user.roles):
-        await interaction.response.send_message('You need the Moderator role to use this command.', ephemeral=True)
+        await interaction.response.send_message('Stupid nigga, be a mod first', ephemeral=True)
         return
     
     try:
