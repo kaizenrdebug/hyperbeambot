@@ -414,7 +414,7 @@ client.on('messageCreate', async (message) => {
                     .setTitle('Message Deleted')
                     .setDescription('Your message in ' + message.guild.name + ' was deleted due to containing a censored word.')
                     .setColor(0xff0000)
-                    .setFooter({ text: 'HAPPY BEAMING! 🥳' })]
+                    .setFooter({ text: 'be careful next time or i will king ur ass' })]
             });
         } catch (e) {
             console.error('Failed to delete censored message in guild ' + guildId + ':', e);
@@ -431,14 +431,14 @@ client.on('messageCreate', async (message) => {
     const commandName = args.shift().toLowerCase();
 
     const commandsMap = {
-        ping: async () => await message.reply('Pong!'),
+        ping: async () => await message.reply('nga im alive!'),
         help: async () => {
             const embed = new EmbedBuilder()
                 .setTitle('Bot Commands')
                 .setDescription('Available commands (use /usage for details):')
                 .addFields(commandHelp.slice(0, 10).map(cmd => ({ name: cmd.name, value: cmd.description, inline: true })))
                 .setColor(0x00ff00)
-                .setFooter({ text: 'HAPPY BEAMING! 🥳' });
+                .setFooter({ text: 'or... not' });
             await message.reply({ embeds: [embed] });
         },
         coin: async () => {
@@ -603,7 +603,7 @@ client.on('interactionCreate', async interaction => {
                 .setDescription('[Read the full guide here](https://ptb.discord.com/channels/1406868498772398091/1428791488866947132)\n\nNGA DONT BE LAZY ASF AND START READING')
                 .setColor(0x00ff00)
                 .addFields({ name: '🟢 Extra Tools', value: '[Test Hyperlink](https://omegabeam-hyperlink.netlify.app/)\n[Main Website](https://shorturl.at/jiifG)', inline: false })
-                .setFooter({ text: 'HAPPY BEAMING! 🥳' });
+                .setFooter({ text: ' ' });
             await interaction.reply({ embeds: [embed], ephemeral: true });
         } else if (commandName === 'ban') {
             const user = interaction.options.getMember('user');
@@ -614,7 +614,7 @@ client.on('interactionCreate', async interaction => {
                     .setTitle('User Banned')
                     .setDescription('Banned ' + user + ' for: ' + reason)
                     .setColor(0xff0000)
-                    .setFooter({ text: 'HAPPY BEAMING! 🥳' });
+                    .setFooter({ text: 'aaaaaaa' });
                 await interaction.reply({ embeds: [embed] });
             } catch (error) {
                 await interaction.reply({ content: 'Failed to ban user.', ephemeral: true });
@@ -628,7 +628,6 @@ client.on('interactionCreate', async interaction => {
                     .setTitle('User Kicked')
                     .setDescription('Kicked ' + user + ' for: ' + reason)
                     .setColor(0xff0000)
-                    .setFooter({ text: 'HAPPY BEAMING! 🥳' });
                 await interaction.reply({ embeds: [embed] });
             } catch (error) {
                 await interaction.reply({ content: 'Failed to kick user.', ephemeral: true });
@@ -646,7 +645,6 @@ client.on('interactionCreate', async interaction => {
                     .setTitle('User Muted')
                     .setDescription('Muted ' + user + ' for ' + durationMinutes + ' minutes: ' + reason)
                     .setColor(0xff0000)
-                    .setFooter({ text: 'HAPPY BEAMING! 🥳' });
                 await interaction.reply({ embeds: [embed] });
             } catch (error) {
                 await interaction.reply({ content: 'Failed to mute user. Ensure bot has permissions and role hierarchy is correct.', ephemeral: true });
@@ -661,7 +659,6 @@ client.on('interactionCreate', async interaction => {
                 .setTitle('Bot Uptime')
                 .setDescription('Bot has been running for ' + days + 'd ' + hours + 'h ' + minutes + 'm ' + seconds + 's')
                 .setColor(0x00ff00)
-                .setFooter({ text: 'HAPPY BEAMING! 🥳' });
             await interaction.reply({ embeds: [embed], ephemeral: false });
         } else if (commandName === 'warn') {
             const user = interaction.options.getMember('user');
@@ -673,14 +670,12 @@ client.on('interactionCreate', async interaction => {
                     .setTitle('User Warned')
                     .setDescription('Warned ' + user + ' for: ' + reason + '\nTotal Warnings: ' + warnings.length)
                     .setColor(0xff0000)
-                    .setFooter({ text: 'HAPPY BEAMING! 🥳' });
                 try {
                     await user.send({ embeds: [
                         new EmbedBuilder()
                             .setTitle('Warned in ' + interaction.guild.name)
                             .setDescription('**Reason:** ' + reason)
                             .setColor(0xff0000)
-                            .setFooter({ text: 'HAPPY BEAMING! 🥳' })
                     ]});
                 } catch (e) {
                     embed.addFields({ name: 'Note', value: 'Could not send DM to user.' });
@@ -698,7 +693,6 @@ client.on('interactionCreate', async interaction => {
                     .setTitle('Messages Cleared')
                     .setDescription('Deleted ' + amount + ' messages')
                     .setColor(0x00ff00)
-                    .setFooter({ text: 'HAPPY BEAMING! 🥳' });
                 await interaction.reply({ embeds: [embed], ephemeral: true });
             } catch (error) {
                 await interaction.reply({ content: 'Failed to clear messages.', ephemeral: true });
@@ -711,7 +705,7 @@ client.on('interactionCreate', async interaction => {
                 .setDescription('Here are all available commands:')
                 .addFields(commandHelp.map(cmd => ({ name: cmd.name, value: cmd.description, inline: true })))
                 .setColor(0x00ff00)
-                .setFooter({ text: 'Use /usage for detailed help! HAPPY BEAMING! 🥳' });
+                .setFooter({ text: 'Use /usage for detailed help! ' });
             await interaction.reply({ embeds: [embed], ephemeral: true });
         } else if (commandName === 'invite') {
             const inviteUrl = 'https://discord.com/api/oauth2/authorize?client_id=' + client.user.id + '&permissions=8&scope=bot%20applications.commands';
@@ -719,7 +713,6 @@ client.on('interactionCreate', async interaction => {
                 .setTitle('Invite Me!')
                 .setDescription('Add me to your server using [this invite link](' + inviteUrl + ').')
                 .setColor(0x00ff00)
-                .setFooter({ text: 'HAPPY BEAMING! 🥳' });
             await interaction.reply({ embeds: [embed], ephemeral: true });
         } else if (commandName === 'getserver') {
             const subcommand = interaction.options.getSubcommand();
@@ -760,7 +753,7 @@ client.on('interactionCreate', async interaction => {
                 const embed = new EmbedBuilder()
                     .setTitle('Warnings for ' + user.tag)
                     .setColor(0xff0000)
-                    .setFooter({ text: 'Total: ' + warnings.length + ' warning(s) | HAPPY BEAMING! 🥳' });
+                    .setFooter({ text: 'Total: ' + warnings.length + ' warning(s) ' });
                 warnings.forEach((warning, index) => {
                     const moderator = interaction.guild.members.cache.get(warning.moderatorId)?.user.tag || 'Unknown';
                     embed.addFields({
@@ -798,7 +791,6 @@ client.on('interactionCreate', async interaction => {
                     .setTitle('User Unmuted')
                     .setDescription('Unmuted ' + user + '.')
                     .setColor(0x00ff00)
-                    .setFooter({ text: 'HAPPY BEAMING! 🥳' });
                 await interaction.reply({ embeds: [embed] });
             } catch (error) {
                 await interaction.reply({ content: 'Failed to unmute user. Ensure bot has permissions.', ephemeral: true });
@@ -1074,3 +1066,4 @@ client.on('interactionCreate', async interaction => {
 });
 
 client.login(process.env.DISCORD_TOKEN);
+
