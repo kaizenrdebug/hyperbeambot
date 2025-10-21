@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits, SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField, AttachmentBuilder, ChannelType, Routes, REST, Colors } = require('discord.js');
+const { Client, GatewayIntentBits, SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField, AttachmentBuilder, ChannelType, Routes, REST } = require('discord.js');
 const express = require('express');
 const { v4: uuidv4 } = require('uuid');
 const fs = require('fs').promises;
@@ -495,7 +495,7 @@ client.on('interactionCreate', async interaction => {
 
         if (commandName === 'tutorials') {
             const option = interaction.options.getString('option');
-            if (option === 'private') {
+            if (option === 'privaterate') {
                 const pages = [
                     new EmbedBuilder()
                         .setTitle('Private Server Tutorial <:Verified:1429128618801365113> (1/3)')
@@ -662,25 +662,30 @@ client.on('interactionCreate', async interaction => {
         } else if (commandName === 'warn') {
             const user = interaction.options.getMember('user');
             const reason = interaction.options.getString('reason') || 'No reason provided';
-            const warning = addWarning(interaction.guild.id, user.id, reason, interaction.user.id);
-            const warnings = getWarnings(interaction.guild.id, user.id);
-            const embed = new EmbedBuilder()
-                .setTitle('User Warned')
-                .setDescription(`Warned ${user} for: ${reason}\nTotal Warnings: ${warnings.length}`)
-                .setColor(0xff0000)
-                .setFooter({ text: 'HAPPY BEAMING! 🥳' });
             try {
-                await user.send({ embeds: [
-                    new EmbedBuilder()
-                        .setTitle(`Warned in ${interaction.guild.name}`)
-                        .setDescription(`**Reason:** ${reason}`)
-                        .setColor(0xff0000)
-                        .setFooter({ text: 'HAPPY BEAMING! 🥳' })
-                ]});
-            } catch (e) {
-                embed.addFields({ name: 'Note', value: 'Could not send DM to user.' });
+                const warning = addWarning(interaction.guild.id, user.id, reason, interaction.user.id);
+                const warnings = getWarnings(interaction.guild.id, user.id);
+                const embed = new EmbedBuilder()
+                    .setTitle('User Warned')
+                    .setDescription(`Warned ${user} for: ${reason}\nTotal Warnings: ${warnings.length}`)
+                    .setColor(0xff0000)
+                    .setFooter({ text: 'HAPPY BEAMING! 🥳' });
+                try {
+                    await user.send({ embeds: [
+                        new EmbedBuilder()
+                            .setTitle(`Warned in ${interaction.guild.name}`)
+                            .setDescription(`**Reason:** ${reason}`)
+                            .setColor(0xff0000)
+                            .setFooter({ text: 'HAPPY BEAMING! 🥳' })
+                    ]});
+                } catch (e) {
+                    embed.addFields({ name: 'Note', value: 'Could not send DM to user.' });
+                }
+                await interaction.reply({ embeds: [embed] });
+            } catch (error) {
+                console.error(`Error in /warn for user ${user.id}:`, error);
+                await interaction.reply({ content: 'An error occurred while warning the user.', ephemeral: true });
             }
-            await interaction.reply({ embeds: [embed] });
         } else if (commandName === 'clear') {
             const amount = interaction.options.getInteger('amount');
             try {
@@ -741,31 +746,41 @@ client.on('interactionCreate', async interaction => {
             }
         } else if (commandName === 'warnings') {
             const user = interaction.options.getUser('user');
-            const warnings = getWarnings(interaction.guild.id, user.id);
-            if (warnings.length === 0) {
-                await interaction.reply({ content: `${user.tag} has no warnings.`, ephemeral: true });
-                return;
-            }
-            const embed = new EmbedBuilder()
-                .setTitle(`Warnings for ${user.tag}`)
-                .setColor(0xff0000)
-                .setFooter({ text: `Total: ${warnings.length} warning(s) | HAPPY BEAMING! 🝑' });
-            warnings.forEach((warning, index) => {
-                const moderator = interaction.guild.members.cache.get(warning.moderatorId)?.user.tag || 'Unknown';
-                embed.addFields({
-                    name: `Warning #${index + 1}`,
-                    value: `**Reason:** ${warning.reason}\n**Moderator:** ${moderator}\n**Date:** <t:${Math.floor(warning.timestamp / 1000)}:R>`,
-                    inline: false
+            try {
+                const warnings = getWarnings(interaction.guild.id, user.id);
+                if (warnings.length === 0) {
+                    await interaction.reply({ content: `\`${user.tag}\` has no warnings.`, ephemeral: true });
+                    return;
+                }
+                const embed = new EmbedBuilder()
+                    .setTitle(`Warnings for ${user.tag}`)
+                    .setColor(0xff0000)
+                    .setFooter({ text: `Total: ${warnings.length} warning(s) | HAPPY BEAMING! 🝑' });
+                warnings.forEach((warning, index) => {
+                    const moderator = interaction.guild.members.cache.get(warning.moderatorId)?.user.tag || 'Unknown';
+                    embed.addFields({
+                        name: `Warning #${index + 1}`,
+                        value: `**Reason:** ${warning.reason}\n**Moderator:** ${moderator}\n**Date:** <t:${Math.floor(warning.timestamp / 1000)}:R>`,
+                        inline: false
+                    });
                 });
-            });
-            await interaction.reply({ embeds: [embed], ephemeral: true });
+                await interaction.reply({ embeds: [embed], ephemeral: true });
+            } catch (error) {
+                console.error(`Error in /warnings for user ${user.id}:`, error);
+                await interaction.reply({ content: 'An error occurred while fetching warnings.', ephemeral: true });
+            }
         } else if (commandName === 'clearwarnings') {
             const user = interaction.options.getUser('user');
-            const cleared = clearWarnings(interaction.guild.id, user.id);
-            await interaction.reply({
-                content: cleared ? `Cleared all warnings for ${user.tag}.` : `${user.tag} has no warnings to clear.`,
-                ephemeral: true
-            });
+            try {
+                const cleared = clearWarnings(interaction.guild.id, user.id);
+                await interaction.reply({
+                    content: cleared ? `Cleared all warnings for ${user.tag}.` : `\`${user.tag}\` has no warnings to clear.`,
+                    ephemeral: true
+                });
+            } catch (error) {
+                console.error(`Error in /clearwarnings for user ${user.id}:`, error);
+                await interaction.reply({ content: 'An error occurred while clearing warnings.', ephemeral: true });
+            }
         } else if (commandName === 'unmute') {
             const user = interaction.options.getMember('user');
             if (!user.isCommunicationDisabled()) {
@@ -959,6 +974,10 @@ client.on('interactionCreate', async interaction => {
             }
         } else if (commandName === 'dice') {
             const sides = interaction.options.getInteger('sides') || 6;
+            if (sides < 1) {
+                await interaction.reply({ content: 'Number of sides must be at least 1.', ephemeral: true });
+                return;
+            }
             const roll = Math.floor(Math.random() * sides) + 1;
             const embed = new EmbedBuilder()
                 .setTitle('Dice Roll')
@@ -991,6 +1010,10 @@ client.on('interactionCreate', async interaction => {
         } else if (commandName === 'audit') {
             const limit = interaction.options.getInteger('limit') || 10;
             try {
+                if (limit < 1 || limit > 100) {
+                    await interaction.reply({ content: 'Limit must be between 1 and 100.', ephemeral: true });
+                    return;
+                }
                 const logs = await interaction.guild.fetchAuditLogs({ limit });
                 const embed = new EmbedBuilder()
                     .setTitle('Audit Logs')
@@ -1021,7 +1044,11 @@ client.on('interactionCreate', async interaction => {
         } else if (commandName === 'poll') {
             const question = interaction.options.getString('question');
             const optionsStr = interaction.options.getString('options');
-            const options = optionsStr.split(',').map(o => o.trim());
+            const options = optionsStr.split(',').map(o => o.trim()).filter(o => o);
+            if (options.length < 2 || options.length > 10) {
+                await interaction.reply({ content: 'Poll must have 2 to 10 options.', ephemeral: true });
+                return;
+            }
             try {
                 const embed = new EmbedBuilder()
                     .setTitle(`Poll: ${question}`)
@@ -1029,7 +1056,7 @@ client.on('interactionCreate', async interaction => {
                     .setColor(0x00ff00)
                     .setFooter({ text: 'HAPPY BEAMING! 🝑' });
                 const pollMsg = await interaction.reply({ embeds: [embed], fetchReply: true });
-                for (let i = 1; i <= Math.min(options.length, 10); i++) {
+                for (let i = 1; i <= options.length; i++) {
                     await pollMsg.react(`${i}️⃣`);
                 }
             } catch (e) {
