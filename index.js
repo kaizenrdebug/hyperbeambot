@@ -94,7 +94,7 @@ const commandHelp = [
 ];
 
 client.once('ready', async () => {
-    console.log(`Logged in as ${client.user.tag}`);
+    console.log('Logged in as ' + client.user.tag);
     await initStorage();
 
     const commands = [
@@ -364,7 +364,7 @@ client.once('ready', async () => {
     try {
         const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
         await rest.put(Routes.applicationCommands(client.user.id), { body: commands.map(command => command.toJSON()) });
-        console.log(`Synced ${commands.length} command(s)`);
+        console.log('Synced ' + commands.length + ' command(s)');
     } catch (error) {
         console.error('Error syncing commands:', error);
     }
@@ -408,12 +408,12 @@ client.on('messageCreate', async (message) => {
             await message.author.send({
                 embeds: [new EmbedBuilder()
                     .setTitle('Message Deleted')
-                    .setDescription(`Your message in ${message.guild.name} was deleted due to containing a censored word.`)
+                    .setDescription('Your message in ' + message.guild.name + ' was deleted due to containing a censored word.')
                     .setColor(0xff0000)
                     .setFooter({ text: 'HAPPY BEAMING! 🥳' })]
             });
         } catch (e) {
-            console.error(`Failed to delete censored message in guild ${guildId}:`, e);
+            console.error('Failed to delete censored message in guild ' + guildId + ':', e);
         }
         return;
     }
@@ -439,13 +439,13 @@ client.on('messageCreate', async (message) => {
         },
         coin: async () => {
             const result = Math.random() < 0.5 ? 'Heads' : 'Tails';
-            await message.reply(`The coin landed on ${result}!`);
+            await message.reply('The coin landed on ' + result + '!');
         },
         dice: async () => {
             const sides = parseInt(args[0]) || 6;
             if (isNaN(sides) || sides < 1) return await message.reply('Please provide a valid number of sides.');
             const roll = Math.floor(Math.random() * sides) + 1;
-            await message.reply(`You rolled a ${roll}! (1-${sides})`);
+            await message.reply('You rolled a ' + roll + '! (1-' + sides + ')');
         },
     };
 
@@ -453,11 +453,11 @@ client.on('messageCreate', async (message) => {
         try {
             await commandsMap[commandName]();
         } catch (e) {
-            console.error(`Prefix command error: ${commandName}`, e);
+            console.error('Prefix command error: ' + commandName, e);
             await message.reply({ content: 'An error occurred. Try the slash command instead.', ephemeral: true });
         }
     } else {
-        await message.reply({ content: `Unknown prefix command: ${commandName}. Use /help for commands.`, ephemeral: true });
+        await message.reply({ content: 'Unknown prefix command: ' + commandName + '. Use /help for commands.', ephemeral: true });
     }
 });
 
@@ -495,7 +495,7 @@ client.on('interactionCreate', async interaction => {
 
         if (commandName === 'tutorials') {
             const option = interaction.options.getString('option');
-            if (option === 'privaterate') {
+            if (option === 'private') {
                 const pages = [
                     new EmbedBuilder()
                         .setTitle('Private Server Tutorial <:Verified:1429128618801365113> (1/3)')
@@ -533,12 +533,12 @@ client.on('interactionCreate', async interaction => {
                 const row = new ActionRowBuilder()
                     .addComponents(
                         new ButtonBuilder()
-                            .setCustomId(`prev_${interaction.user.id}`)
+                            .setCustomId('prev_' + interaction.user.id)
                             .setLabel('Previous Page')
                             .setStyle(ButtonStyle.Primary)
                             .setDisabled(true),
                         new ButtonBuilder()
-                            .setCustomId(`next_${interaction.user.id}`)
+                            .setCustomId('next_' + interaction.user.id)
                             .setLabel('Next Page')
                             .setStyle(ButtonStyle.Primary)
                     );
@@ -553,9 +553,9 @@ client.on('interactionCreate', async interaction => {
                 let currentPage = 0;
 
                 collector.on('collect', async i => {
-                    if (i.customId === `prev_${interaction.user.id}`) {
+                    if (i.customId === 'prev_' + interaction.user.id) {
                         currentPage = Math.max(0, currentPage - 1);
-                    } else if (i.customId === `next_${interaction.user.id}`) {
+                    } else if (i.customId === 'next_' + interaction.user.id) {
                         currentPage = Math.min(pages.length - 1, currentPage + 1);
                     }
 
@@ -608,7 +608,7 @@ client.on('interactionCreate', async interaction => {
                 await user.ban({ reason });
                 const embed = new EmbedBuilder()
                     .setTitle('User Banned')
-                    .setDescription(`Banned ${user} for: ${reason}`)
+                    .setDescription('Banned ' + user + ' for: ' + reason)
                     .setColor(0xff0000)
                     .setFooter({ text: 'HAPPY BEAMING! 🥳' });
                 await interaction.reply({ embeds: [embed] });
@@ -622,7 +622,7 @@ client.on('interactionCreate', async interaction => {
                 await user.kick(reason);
                 const embed = new EmbedBuilder()
                     .setTitle('User Kicked')
-                    .setDescription(`Kicked ${user} for: ${reason}`)
+                    .setDescription('Kicked ' + user + ' for: ' + reason)
                     .setColor(0xff0000)
                     .setFooter({ text: 'HAPPY BEAMING! 🥳' });
                 await interaction.reply({ embeds: [embed] });
@@ -640,7 +640,7 @@ client.on('interactionCreate', async interaction => {
                 await user.timeout(durationMinutes * 60 * 1000, reason);
                 const embed = new EmbedBuilder()
                     .setTitle('User Muted')
-                    .setDescription(`Muted ${user} for ${durationMinutes} minutes: ${reason}`)
+                    .setDescription('Muted ' + user + ' for ' + durationMinutes + ' minutes: ' + reason)
                     .setColor(0xff0000)
                     .setFooter({ text: 'HAPPY BEAMING! 🥳' });
                 await interaction.reply({ embeds: [embed] });
@@ -655,7 +655,7 @@ client.on('interactionCreate', async interaction => {
             const seconds = uptime % 60;
             const embed = new EmbedBuilder()
                 .setTitle('Bot Uptime')
-                .setDescription(`Bot has been running for ${days}d ${hours}h ${minutes}m ${seconds}s`)
+                .setDescription('Bot has been running for ' + days + 'd ' + hours + 'h ' + minutes + 'm ' + seconds + 's')
                 .setColor(0x00ff00)
                 .setFooter({ text: 'HAPPY BEAMING! 🥳' });
             await interaction.reply({ embeds: [embed], ephemeral: false });
@@ -667,14 +667,14 @@ client.on('interactionCreate', async interaction => {
                 const warnings = getWarnings(interaction.guild.id, user.id);
                 const embed = new EmbedBuilder()
                     .setTitle('User Warned')
-                    .setDescription(`Warned ${user} for: ${reason}\nTotal Warnings: ${warnings.length}`)
+                    .setDescription('Warned ' + user + ' for: ' + reason + '\nTotal Warnings: ' + warnings.length)
                     .setColor(0xff0000)
                     .setFooter({ text: 'HAPPY BEAMING! 🥳' });
                 try {
                     await user.send({ embeds: [
                         new EmbedBuilder()
-                            .setTitle(`Warned in ${interaction.guild.name}`)
-                            .setDescription(`**Reason:** ${reason}`)
+                            .setTitle('Warned in ' + interaction.guild.name)
+                            .setDescription('**Reason:** ' + reason)
                             .setColor(0xff0000)
                             .setFooter({ text: 'HAPPY BEAMING! 🥳' })
                     ]});
@@ -683,7 +683,7 @@ client.on('interactionCreate', async interaction => {
                 }
                 await interaction.reply({ embeds: [embed] });
             } catch (error) {
-                console.error(`Error in /warn for user ${user.id}:`, error);
+                console.error('Error in /warn for user ' + user.id + ':', error);
                 await interaction.reply({ content: 'An error occurred while warning the user.', ephemeral: true });
             }
         } else if (commandName === 'clear') {
@@ -692,9 +692,9 @@ client.on('interactionCreate', async interaction => {
                 await interaction.channel.bulkDelete(amount, true);
                 const embed = new EmbedBuilder()
                     .setTitle('Messages Cleared')
-                    .setDescription(`Deleted ${amount} messages`)
+                    .setDescription('Deleted ' + amount + ' messages')
                     .setColor(0x00ff00)
-                    .setFooter({ text: 'HAPPY BEAMING! 🝑' });
+                    .setFooter({ text: 'HAPPY BEAMING! 🥳' });
                 await interaction.reply({ embeds: [embed], ephemeral: true });
             } catch (error) {
                 await interaction.reply({ content: 'Failed to clear messages.', ephemeral: true });
@@ -707,15 +707,15 @@ client.on('interactionCreate', async interaction => {
                 .setDescription('Here are all available commands:')
                 .addFields(commandHelp.map(cmd => ({ name: cmd.name, value: cmd.description, inline: true })))
                 .setColor(0x00ff00)
-                .setFooter({ text: 'Use /usage for detailed help! HAPPY BEAMING! 🝑' });
+                .setFooter({ text: 'Use /usage for detailed help! HAPPY BEAMING! 🥳' });
             await interaction.reply({ embeds: [embed], ephemeral: true });
         } else if (commandName === 'invite') {
-            const inviteUrl = `https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands`;
+            const inviteUrl = 'https://discord.com/api/oauth2/authorize?client_id=' + client.user.id + '&permissions=8&scope=bot%20applications.commands';
             const embed = new EmbedBuilder()
                 .setTitle('Invite Me!')
-                .setDescription(`Add me to your server using [this invite link](${inviteUrl}).`)
+                .setDescription('Add me to your server using [this invite link](' + inviteUrl + ').')
                 .setColor(0x00ff00)
-                .setFooter({ text: 'HAPPY BEAMING! 🝑' });
+                .setFooter({ text: 'HAPPY BEAMING! 🥳' });
             await interaction.reply({ embeds: [embed], ephemeral: true });
         } else if (commandName === 'getserver') {
             const subcommand = interaction.options.getSubcommand();
@@ -725,15 +725,15 @@ client.on('interactionCreate', async interaction => {
                     .setTitle(guild.name)
                     .setThumbnail(guild.iconURL({ dynamic: true, size: 256 }))
                     .addFields(
-                        { name: 'Members', value: `${guild.memberCount}`, inline: true },
-                        { name: 'Humans', value: `${guild.members.cache.filter(m => !m.user.bot).size}`, inline: true },
-                        { name: 'Bots', value: `${guild.members.cache.filter(m => m.user.bot).size}`, inline: true },
-                        { name: 'Channels', value: `${guild.channels.cache.size}`, inline: true },
-                        { name: 'Roles', value: `${guild.roles.cache.size - 1}`, inline: true },
-                        { name: 'Created', value: `<t:${Math.floor(guild.createdTimestamp / 1000)}:F>`, inline: true }
+                        { name: 'Members', value: '' + guild.memberCount, inline: true },
+                        { name: 'Humans', value: '' + guild.members.cache.filter(m => !m.user.bot).size, inline: true },
+                        { name: 'Bots', value: '' + guild.members.cache.filter(m => m.user.bot).size, inline: true },
+                        { name: 'Channels', value: '' + guild.channels.cache.size, inline: true },
+                        { name: 'Roles', value: '' + (guild.roles.cache.size - 1), inline: true },
+                        { name: 'Created', value: '<t:' + Math.floor(guild.createdTimestamp / 1000) + ':F>', inline: true }
                     )
                     .setColor(0x00ff00)
-                    .setFooter({ text: `Server ID: ${guild.id} | HAPPY BEAMING! 🝑' });
+                    .setFooter({ text: 'Server ID: ' + guild.id + ' | HAPPY BEAMING! 🥳' });
                 await interaction.reply({ embeds: [embed], ephemeral: true });
             } else if (subcommand === 'icon') {
                 if (!interaction.guild.iconURL()) {
@@ -747,26 +747,27 @@ client.on('interactionCreate', async interaction => {
         } else if (commandName === 'warnings') {
             const user = interaction.options.getUser('user');
             try {
+                console.log('Debug: /warnings content: ' + '`' + user.tag + '` has no warnings.');
                 const warnings = getWarnings(interaction.guild.id, user.id);
                 if (warnings.length === 0) {
-                    await interaction.reply({ content: `\`${user.tag}\` has no warnings.`, ephemeral: true });
+                    await interaction.reply({ content: '`' + user.tag + '` has no warnings.', ephemeral: true });
                     return;
                 }
                 const embed = new EmbedBuilder()
-                    .setTitle(`Warnings for ${user.tag}`)
+                    .setTitle('Warnings for ' + user.tag)
                     .setColor(0xff0000)
-                    .setFooter({ text: `Total: ${warnings.length} warning(s) | HAPPY BEAMING! 🝑' });
+                    .setFooter({ text: 'Total: ' + warnings.length + ' warning(s) | HAPPY BEAMING! 🥳' });
                 warnings.forEach((warning, index) => {
                     const moderator = interaction.guild.members.cache.get(warning.moderatorId)?.user.tag || 'Unknown';
                     embed.addFields({
-                        name: `Warning #${index + 1}`,
-                        value: `**Reason:** ${warning.reason}\n**Moderator:** ${moderator}\n**Date:** <t:${Math.floor(warning.timestamp / 1000)}:R>`,
+                        name: 'Warning #' + (index + 1),
+                        value: '**Reason:** ' + warning.reason + '\n**Moderator:** ' + moderator + '\n**Date:** <t:' + Math.floor(warning.timestamp / 1000) + ':R>',
                         inline: false
                     });
                 });
                 await interaction.reply({ embeds: [embed], ephemeral: true });
             } catch (error) {
-                console.error(`Error in /warnings for user ${user.id}:`, error);
+                console.error('Error in /warnings for user ' + user.id + ':', error);
                 await interaction.reply({ content: 'An error occurred while fetching warnings.', ephemeral: true });
             }
         } else if (commandName === 'clearwarnings') {
@@ -774,11 +775,11 @@ client.on('interactionCreate', async interaction => {
             try {
                 const cleared = clearWarnings(interaction.guild.id, user.id);
                 await interaction.reply({
-                    content: cleared ? `Cleared all warnings for ${user.tag}.` : `\`${user.tag}\` has no warnings to clear.`,
+                    content: cleared ? 'Cleared all warnings for ' + user.tag + '.' : '`' + user.tag + '` has no warnings to clear.',
                     ephemeral: true
                 });
             } catch (error) {
-                console.error(`Error in /clearwarnings for user ${user.id}:`, error);
+                console.error('Error in /clearwarnings for user ' + user.id + ':', error);
                 await interaction.reply({ content: 'An error occurred while clearing warnings.', ephemeral: true });
             }
         } else if (commandName === 'unmute') {
@@ -791,9 +792,9 @@ client.on('interactionCreate', async interaction => {
                 await user.timeout(null, 'Unmuted');
                 const embed = new EmbedBuilder()
                     .setTitle('User Unmuted')
-                    .setDescription(`Unmuted ${user}.`)
+                    .setDescription('Unmuted ' + user + '.')
                     .setColor(0x00ff00)
-                    .setFooter({ text: 'HAPPY BEAMING! 🝑' });
+                    .setFooter({ text: 'HAPPY BEAMING! 🥳' });
                 await interaction.reply({ embeds: [embed] });
             } catch (error) {
                 await interaction.reply({ content: 'Failed to unmute user. Ensure bot has permissions.', ephemeral: true });
@@ -804,9 +805,9 @@ client.on('interactionCreate', async interaction => {
             if (!censoredWordsStore[interaction.guild.id].censoredWords.includes(word)) {
                 censoredWordsStore[interaction.guild.id].censoredWords.push(word);
                 await saveCensoredWords();
-                await interaction.reply({ content: `Added "${word}" to censored words.`, ephemeral: true });
+                await interaction.reply({ content: 'Added "' + word + '" to censored words.', ephemeral: true });
             } else {
-                await interaction.reply({ content: `"${word}" is already censored.`, ephemeral: true });
+                await interaction.reply({ content: '"' + word + '" is already censored.', ephemeral: true });
             }
         } else if (commandName === 'ucw') {
             const word = interaction.options.getString('word');
@@ -815,9 +816,9 @@ client.on('interactionCreate', async interaction => {
             if (index !== -1) {
                 censoredWordsStore[interaction.guild.id].censoredWords.splice(index, 1);
                 await saveCensoredWords();
-                await interaction.reply({ content: `Removed "${word}" from censored words.`, ephemeral: true });
+                await interaction.reply({ content: 'Removed "' + word + '" from censored words.', ephemeral: true });
             } else {
-                await interaction.reply({ content: `"${word}" is not censored.`, ephemeral: true });
+                await interaction.reply({ content: '"' + word + '" is not censored.', ephemeral: true });
             }
         } else if (commandName === 'cwl') {
             const words = censoredWordsStore[interaction.guild.id]?.censoredWords || [];
@@ -829,7 +830,7 @@ client.on('interactionCreate', async interaction => {
                 .setTitle('Censored Words')
                 .setDescription(words.join(', '))
                 .setColor(0xff0000)
-                .setFooter({ text: 'HAPPY BEAMING! 🝑' });
+                .setFooter({ text: 'HAPPY BEAMING! 🥳' });
             await interaction.reply({ embeds: [embed], ephemeral: true });
         } else if (commandName === 'prefix') {
             const subcommand = interaction.options.getSubcommand();
@@ -839,9 +840,9 @@ client.on('interactionCreate', async interaction => {
                 if (!prefixesStore[interaction.guild.id].prefixes.includes(prefix)) {
                     prefixesStore[interaction.guild.id].prefixes.push(prefix);
                     await savePrefixes();
-                    await interaction.reply({ content: `Added prefix "${prefix}".`, ephemeral: true });
+                    await interaction.reply({ content: 'Added prefix "' + prefix + '".', ephemeral: true });
                 } else {
-                    await interaction.reply({ content: `Prefix "${prefix}" already exists.`, ephemeral: true });
+                    await interaction.reply({ content: 'Prefix "' + prefix + '" already exists.', ephemeral: true });
                 }
             } else if (subcommand === 'remove') {
                 const prefix = interaction.options.getString('prefix');
@@ -849,9 +850,9 @@ client.on('interactionCreate', async interaction => {
                 if (index !== -1) {
                     prefixesStore[interaction.guild.id].prefixes.splice(index, 1);
                     await savePrefixes();
-                    await interaction.reply({ content: `Removed prefix "${prefix}".`, ephemeral: true });
+                    await interaction.reply({ content: 'Removed prefix "' + prefix + '".', ephemeral: true });
                 } else {
-                    await interaction.reply({ content: `Prefix "${prefix}" not found.`, ephemeral: true });
+                    await interaction.reply({ content: 'Prefix "' + prefix + '" not found.', ephemeral: true });
                 }
             } else if (subcommand === 'list') {
                 const prefixes = prefixesStore[interaction.guild.id].prefixes || [];
@@ -863,7 +864,7 @@ client.on('interactionCreate', async interaction => {
                     .setTitle('Prefixes')
                     .setDescription(prefixes.join(', '))
                     .setColor(0x00ff00)
-                    .setFooter({ text: 'HAPPY BEAMING! 🝑' });
+                    .setFooter({ text: 'HAPPY BEAMING! 🥳' });
                 await interaction.reply({ embeds: [embed], ephemeral: true });
             } else if (subcommand === 'clear') {
                 prefixesStore[interaction.guild.id].prefixes = [];
@@ -875,14 +876,14 @@ client.on('interactionCreate', async interaction => {
             const embed = new EmbedBuilder()
                 .setTitle('Command Usage')
                 .setColor(0x00ff00)
-                .setFooter({ text: 'HAPPY BEAMING! 🝑' });
+                .setFooter({ text: 'HAPPY BEAMING! 🥳' });
             if (specificCommand) {
                 const cmd = commandHelp.find(c => c.name.toLowerCase() === specificCommand || c.name.toLowerCase().startsWith(specificCommand));
                 if (!cmd) {
-                    await interaction.reply({ content: `Command "${specificCommand}" not found. Use /usage for all commands.`, ephemeral: true });
+                    await interaction.reply({ content: 'Command "' + specificCommand + '" not found. Use /usage for all commands.', ephemeral: true });
                     return;
                 }
-                embed.setDescription(`**${cmd.name}**\n${cmd.usage}`);
+                embed.setDescription('**' + cmd.name + '**\n' + cmd.usage);
                 await interaction.reply({ embeds: [embed], ephemeral: true });
                 return;
             }
@@ -896,7 +897,7 @@ client.on('interactionCreate', async interaction => {
                 commandHelp.slice(start, end).forEach(cmd => {
                     embed.addFields({ name: cmd.name, value: cmd.usage, inline: false });
                 });
-                embed.setFooter({ text: `Page ${page + 1}/${totalPages} | HAPPY BEAMING! 🝑' });
+                embed.setFooter({ text: 'Page ' + (page + 1) + '/' + totalPages + ' | HAPPY BEAMING! 🥳' });
             };
             updateEmbed();
             const row = new ActionRowBuilder()
@@ -945,9 +946,9 @@ client.on('interactionCreate', async interaction => {
                     embeds: [new EmbedBuilder()
                         .setTitle('CHANNEL LOCKED')
                         .setColor(0xff0000)
-                        .setFooter({ text: 'HAPPY BEAMING! 🝑' })]
+                        .setFooter({ text: 'HAPPY BEAMING! 🥳' })]
                 });
-                await interaction.reply({ content: `Locked ${channel}.`, ephemeral: true });
+                await interaction.reply({ content: 'Locked ' + channel + '.', ephemeral: true });
             } catch (e) {
                 await interaction.reply({ content: 'Failed to lock channel. Check permissions.', ephemeral: true });
             }
@@ -966,9 +967,9 @@ client.on('interactionCreate', async interaction => {
                     embeds: [new EmbedBuilder()
                         .setTitle('CHANNEL UNLOCKED')
                         .setColor(0x00ff00)
-                        .setFooter({ text: 'HAPPY BEAMING! 🝑' })]
+                        .setFooter({ text: 'HAPPY BEAMING! 🥳' })]
                 });
-                await interaction.reply({ content: `Unlocked ${channel}.`, ephemeral: true });
+                await interaction.reply({ content: 'Unlocked ' + channel + '.', ephemeral: true });
             } catch (e) {
                 await interaction.reply({ content: 'Failed to unlock channel. Check permissions.', ephemeral: true });
             }
@@ -981,17 +982,17 @@ client.on('interactionCreate', async interaction => {
             const roll = Math.floor(Math.random() * sides) + 1;
             const embed = new EmbedBuilder()
                 .setTitle('Dice Roll')
-                .setDescription(`You rolled a ${roll}! (1-${sides})`)
+                .setDescription('You rolled a ' + roll + '! (1-' + sides + ')')
                 .setColor(0x00ff00)
-                .setFooter({ text: 'HAPPY BEAMING! 🝑' });
+                .setFooter({ text: 'HAPPY BEAMING! 🥳' });
             await interaction.reply({ embeds: [embed], ephemeral: true });
         } else if (commandName === 'coin') {
             const result = Math.random() < 0.5 ? 'Heads' : 'Tails';
             const embed = new EmbedBuilder()
                 .setTitle('Coin Flip')
-                .setDescription(`The coin landed on ${result}!`)
+                .setDescription('The coin landed on ' + result + '!')
                 .setColor(0x00ff00)
-                .setFooter({ text: 'HAPPY BEAMING! 🝑' });
+                .setFooter({ text: 'HAPPY BEAMING! 🥳' });
             await interaction.reply({ embeds: [embed], ephemeral: true });
         } else if (commandName === 'role') {
             const user = interaction.options.getMember('user');
@@ -1000,9 +1001,9 @@ client.on('interactionCreate', async interaction => {
                 await user.roles.add(role);
                 const embed = new EmbedBuilder()
                     .setTitle('Role Assigned')
-                    .setDescription(`Assigned ${role.name} to ${user}.`)
+                    .setDescription('Assigned ' + role.name + ' to ' + user + '.')
                     .setColor(0x00ff00)
-                    .setFooter({ text: 'HAPPY BEAMING! 🝑' });
+                    .setFooter({ text: 'HAPPY BEAMING! 🥳' });
                 await interaction.reply({ embeds: [embed] });
             } catch (e) {
                 await interaction.reply({ content: 'Failed to assign role. Check role hierarchy.', ephemeral: true });
@@ -1018,11 +1019,11 @@ client.on('interactionCreate', async interaction => {
                 const embed = new EmbedBuilder()
                     .setTitle('Audit Logs')
                     .setColor(0x00ff00)
-                    .setFooter({ text: 'HAPPY BEAMING! 🝑' });
+                    .setFooter({ text: 'HAPPY BEAMING! 🥳' });
                 logs.entries.forEach((entry) => {
                     embed.addFields({
-                        name: `${entry.action} by ${entry.executor.tag}`,
-                        value: `Target: ${entry.target?.tag || 'N/A'}\nReason: ${entry.reason || 'N/A'}\nTime: <t:${Math.floor(entry.createdTimestamp / 1000)}:R>`,
+                        name: entry.action + ' by ' + entry.executor.tag,
+                        value: 'Target: ' + (entry.target?.tag || 'N/A') + '\nReason: ' + (entry.reason || 'N/A') + '\nTime: <t:' + Math.floor(entry.createdTimestamp / 1000) + ':R>',
                         inline: false
                     });
                 });
@@ -1051,13 +1052,13 @@ client.on('interactionCreate', async interaction => {
             }
             try {
                 const embed = new EmbedBuilder()
-                    .setTitle(`Poll: ${question}`)
-                    .setDescription(options.map((o, i) => `${i + 1}. ${o}`).join('\n'))
+                    .setTitle('Poll: ' + question)
+                    .setDescription(options.map((o, i) => (i + 1) + '. ' + o).join('\n'))
                     .setColor(0x00ff00)
-                    .setFooter({ text: 'HAPPY BEAMING! 🝑' });
+                    .setFooter({ text: 'HAPPY BEAMING! 🥳' });
                 const pollMsg = await interaction.reply({ embeds: [embed], fetchReply: true });
                 for (let i = 1; i <= options.length; i++) {
-                    await pollMsg.react(`${i}️⃣`);
+                    await pollMsg.react(i + '️⃣');
                 }
             } catch (e) {
                 await interaction.reply({ content: 'Failed to create poll. Check permissions.', ephemeral: true });
