@@ -30,12 +30,16 @@ async function initStorage() {
         } catch (e) {
             console.error('Failed to load censoredWords.json:', e);
             censoredWordsStore = {};
+            await fs.writeFile(CENSORED_WORDS_FILE, JSON.stringify(censoredWordsStore, null, 2));
+            console.log('Created empty censoredWords.json');
         }
         try {
             prefixesStore = JSON.parse(await fs.readFile(PREFIXES_FILE, 'utf8') || '{}');
         } catch (e) {
             console.error('Failed to load prefixes.json:', e);
             prefixesStore = {};
+            await fs.writeFile(PREFIXES_FILE, JSON.stringify(prefixesStore, null, 2));
+            console.log('Created empty prefixes.json');
         }
     } catch (e) {
         console.error('Failed to initialize storage:', e);
@@ -93,8 +97,8 @@ const commandHelp = [
     { name: '/poll', description: 'Create a poll', usage: 'Use `/poll <question> <options>` to create a poll. Options are comma-separated. Example: `/poll Favorite color? Red,Blue,Green`.' },
 ];
 
-client.once('ready', async () => {
-    console.log('Logged in as ' + client.user.tag);
+client.once('clientReady', async () => {
+    console.log('Logged in as ' + client.user.tag + ' (Command Sync v2)');
     await initStorage();
 
     const commands = [
@@ -364,7 +368,7 @@ client.once('ready', async () => {
     try {
         const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
         await rest.put(Routes.applicationCommands(client.user.id), { body: commands.map(command => command.toJSON()) });
-        console.log('Synced ' + commands.length + ' command(s)');
+        console.log('Synced ' + commands.length + ' command(s) (v2)');
     } catch (error) {
         console.error('Error syncing commands:', error);
     }
